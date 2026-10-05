@@ -2,7 +2,7 @@
 <html lang="en" data-skin="apple">
 <head>
 <meta charset="utf-8">
-<meta name="version" content="2026.10.05-6"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob: https://i.ytimg.com; media-src blob: https: http:; connect-src 'self' https:; frame-src https://www.youtube.com; base-uri 'none'; form-action 'none'">
+<meta name="version" content="2026.10.05-7"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob: https://i.ytimg.com; media-src blob: https: http:; connect-src 'self' https:; frame-src https://www.youtube.com; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -911,7 +911,7 @@ function extToggle(){
 // links play in their own player, so the visuals follow them by listening through the mic
 async function startSync(){
   // on a phone, turning the mic on drops the whole device into call-quality sound, so links there
-  // keep full quality and the visuals flow gently instead of following the sound (see synth below)
+  // keep full quality and the visuals keep time with the song's tempo instead of hearing it (see synth below)
   if(isLive()||!canHover)return;
   await toggleMic();
 }
@@ -989,16 +989,66 @@ addEventListener('message',e=>{
 });
 
 // ---------- motion without sound ----------
-// a link playing with no sound to analyse (always on phones, or on a PC without the mic): the visuals
-// drift and breathe gently instead of pretending to hit beats they cannot hear
+// a link playing with no sound to analyse (always on phones, or on a PC without the mic). Power cannot
+// hear it, so it keeps time instead: the song's tempo is measured from the short preview clip that
+// Apple publishes for most songs, and the visuals pulse at that tempo, tied to the song's position.
+// Where exactly the beat falls is unknown until the listener taps Sync on a beat; both are remembered
+const beatMem=(()=>{try{return JSON.parse(localStorage.getItem('pulse-beat'))||{}}catch{return{}}})();
+const beatKey=e=>e.kind=='yt'?e.id:e.title;
+function beatSave(e){
+  beatMem[beatKey(e)]=[+e.T.toFixed(4),e.ph==null?null:+e.ph.toFixed(3)];
+  const ks=Object.keys(beatMem);if(ks.length>60)delete beatMem[ks[0]];
+  save('pulse-beat',JSON.stringify(beatMem));
+}
+const plainName=s=>s.toLowerCase().replace(/\([^)]*\)|\[[^\]]*\]/g,' ').replace(/[^a-z0-9]+/g,' ').trim();
+async function tempoFind(e){
+  const m=beatMem[beatKey(e)];
+  if(Array.isArray(m)&&m[0]>.25&&m[0]<1.2){e.T=m[0];if(m[1]!=null)e.ph=m[1];return}
+  let T=0;
+  try{
+    const meta=songMeta();if(!meta||!meta.title)throw 0;
+    const j=await(await fetch('https://itunes.apple.com/search?'+new URLSearchParams({term:(meta.artist+' '+meta.title).trim(),entity:'song',limit:'5'}))).json();
+    // only trust a result whose name really appears in what is playing
+    const full=plainName(e.title+' '+meta.title),hit=(j.results||[]).find(r=>r.previewUrl&&full.includes(plainName(r.trackName||'')));
+    if(!hit)throw 0;
+    const buf=await(await fetch(hit.previewUrl)).arrayBuffer();
+    const oc=new(window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,1,44100);
+    const au=await new Promise((res,rej)=>{const p=oc.decodeAudioData(buf,res,rej);if(p&&p.catch)p.catch(rej)});
+    T=bpAnalyse(au).T;
+  }catch{}
+  if(ext!==e)return;
+  if(T>.25&&T<1.2){
+    e.T=T;beatSave(e);
+    toast(`Moving at the song's tempo, ${Math.round(60/T)} BPM`+(canHover?'':'. Tap Sync on a beat to line it up'));
+  }else toast('Tempo not found for this one, so the visuals keep a steady pulse');
+}
+// the Sync button on a phone: tapped on a beat, it lines the pulses up with the song
+function beatTap(){
+  if(!ext)return;
+  const st=songTime();
+  if(st==null||!ext.playing){toast('Start the song, then tap Sync on a beat');return}
+  const T=ext.T||.5,t=st-.04;   // a tap lands a touch late
+  ext.ph=((t%T)+T)%T;ext.bi=Math.round((st-ext.ph)/T);
+  fire(1);
+  if(ext.T)beatSave(ext);
+  toast('Beat lined up');
+}
 function synth(dt,now){
-  const breath=.5+.5*Math.sin(now*1.7),kk=1-Math.exp(-dt*6);
-  L.bass+=((.2+.3*breath)*sens-L.bass)*kk;
-  L.mid+=((.28+.16*Math.sin(now*1.1+1))*sens-L.mid)*kk;
-  L.treb+=((.2+.12*Math.sin(now*2.3))*sens-L.treb)*kk;
+  if(!ext.tempoAsked&&!(ext.kind=='yt'&&ext.title=='YouTube')){ext.tempoAsked=true;tempoFind(ext)}   // once the title is known
+  const T=ext.T||.5,st=songTime(),t=(st==null?now:st)-(ext.ph||0),bi=Math.floor(t/T),fr=t/T-bi;   // fr runs 0 to 1 across a beat
+  // a new beat; small backward wobbles in the reported time are ignored, a real seek starts afresh
+  if(ext.bi==null||bi<ext.bi-1||bi>ext.bi+8)ext.bi=bi;
+  else if(bi>ext.bi){ext.bi=bi;fire([1,.72,.88,.72][((bi%4)+4)%4]*.9)}
+  // a simple kit in time with the song: kick on every beat, snare on every other, hats in between
+  const kick=Math.exp(-fr*5),snare=bi&1?Math.exp(-fr*6):0,hat=Math.exp(-((fr*2)%1)*7),swell=.85+.15*Math.sin(t/T*.196);
+  const kk=1-Math.exp(-dt*18),g=sens*swell;
+  L.bass+=(Math.min(1,(.16+.5*kick)*g)-L.bass)*kk;
+  L.mid+=(Math.min(1,(.22+.3*snare+.08*Math.sin(now*1.1))*g)-L.mid)*kk;
+  L.treb+=(Math.min(1,(.14+.26*hat)*g)-L.treb)*kk;
   for(let i=0;i<N;i++){
-    const w=.5+.5*Math.sin(i*.45+now*2.1+Math.sin(i*.17-now*1.3)*2);
-    const v=Math.min(1,(.12+.5*w)*(1-i/N*.45)*sens);
+    const w=.5+.5*Math.sin(i*.45+now*2.1+Math.sin(i*.17-now*1.3)*2),u=i/N;
+    const hit=u<.25?.55*kick:u<.6?.4*snare:.35*hat;
+    const v=Math.min(1,(.1+.3*w+hit)*(1-u*.4)*g);
     bars[i]+=(v-bars[i])*kk;
   }
   L.beat*=Math.exp(-dt*6);
@@ -2167,8 +2217,9 @@ $('bLink').onclick=()=>{const r=$('linkRow');r.hidden=!r.hidden;if(!r.hidden)$('
 $('bGo').onclick=loadLink;
 $('linkIn').onkeydown=e=>{if(e.key=='Enter')loadLink()};
 $('bExtX').onclick=closeExt;
-$('bSync').onclick=resync;
-$('bSync').hidden=!canHover;
+// on a PC Sync restarts the listening; on a phone, where nothing can listen, it lines the beat up by a tap
+$('bSync').onclick=()=>canHover?resync():beatTap();
+if(!canHover)$('bSync').title='Tap on a beat to line the visuals up with the song';
 $('bBg').onclick=()=>setBg(bgNext+1);
 $('bLyr').onclick=()=>setLyrics((lyrMode+1)%3);
 $('bLyrS').onclick=lyrSync;
