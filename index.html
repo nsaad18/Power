@@ -2,7 +2,7 @@
 <html lang="en" data-skin="apple">
 <head>
 <meta charset="utf-8">
-<meta name="version" content="2026.10.05-4"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob: https://i.ytimg.com; media-src blob: https: http:; connect-src 'self' https:; frame-src https://www.youtube.com; base-uri 'none'; form-action 'none'">
+<meta name="version" content="2026.10.05-5"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob: https://i.ytimg.com; media-src blob: https: http:; connect-src 'self' https:; frame-src https://www.youtube.com; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -597,7 +597,8 @@ vec3 hypno(vec2 p){
   float k2=abs(mod(a2,seg)-seg*.5)/(seg*.5),f2=abs(fract(z2)*2.-1.);
   vec3 c2=uHas>.5?photo(vec2(f2,k2)-wob,1.,3.5):pal(fract(f2*.6+k2*.3+.5));
   c=mix(c,max(c,c2),.45+.3*sin(z*3.1416+uTime*.3));
-  c=hue(rich(c,1.5),.5*sin(z*1.3-uTime*.22));                // colours drift through their neighbours
+  c=hue(rich(c,1.5),.3*sin(z*1.3-uTime*.22));                // colours drift through their neighbours
+  c=mix(c,(.22+1.5*dot(c,vec3(.299,.587,.114)))*uC1,.55);    // washed in the mode's own colour (bright pink)
   c=pow(c,vec3(.88))*(.58+.42*uBass+.3*uBeat);
   c*=.7+.3*sin(f*3.1416);                                    // soft seams give the tunnel depth
   float arm=.5+.5*sin(3.*a+log(r)*7.-uHypZ*12.566+uHypR*3.);  // spiral arms winding into the cover
@@ -712,6 +713,7 @@ let W=0,H=0,artS=.22,cyOff=.06,cxOff=0,artT=.22,cyT=.06,cxT=0,dpr=1,laidOut=fals
 // the cover can be resized by hand: artK is that choice (1 = normal), kept within what fits the screen
 let artK=1,artRaw=1,kMax=1.6,artV=0,cxV=0,cyV=0,dragX=0,dragY=0,tilt=0,tiltV=0;
 // Hypnotise mode: hyp is the mode, hypDyn whether the cover itself joins in; hypF/hypCF fade them in and out
+const HYP_PAL=[[1,.16,.6],[1,.42,.8],[.78,.2,1]];
 let hyp=false,hypDyn=true,hypF=0,hypCF=0,hypZ=0,hypN=6,hypR=0;
 try{const k=parseFloat(localStorage.getItem('pulse-art'));if(k>=.45&&k<=2)artK=artRaw=k}catch{}
 const fitK=k=>Math.max(.45,Math.min(kMax,k)),artGoal=()=>artT*fitK(artK);
@@ -2250,9 +2252,10 @@ function step(ms){
   if(w>=0){if(!hadArt){cur=nxt=w;fading=false;mixF=0}else if(w!=(fading?nxt:cur))gotoPhoto(w)}
   hadArt=w>=0;
   const has=S||w>=0,A=S?bean[bi]:has?photos[cur]:null,B=S?bean[bfade?bn:bi]:has?photos[fading?nxt:cur]:null;
-  const target=has&&(usePhotoColors||S)?B.pal:THEMES[theme],k=Math.min(1,dt*3);
+  // Hypnotise mode has its own colour: bright pink, whatever the cover or theme
+  const pink=hyp&&!bp.open,target=pink?HYP_PAL:has&&(usePhotoColors||S)?B.pal:THEMES[theme],k=Math.min(1,dt*3);
   for(let i=0;i<3;i++)for(let j=0;j<3;j++)pal[i][j]+=(target[i][j]-pal[i][j])*k;
-  syncAccent(has&&(usePhotoColors||S),now);
+  syncAccent(pink||has&&(usePhotoColors||S),now);
 
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,has?A.tex:blankTex);
   gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,has?B.tex:blankTex);
