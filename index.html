@@ -2,7 +2,7 @@
 <html lang="en" data-skin="apple">
 <head>
 <meta charset="utf-8">
-<meta name="version" content="2026.10.05-5"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob: https://i.ytimg.com; media-src blob: https: http:; connect-src 'self' https:; frame-src https://www.youtube.com; base-uri 'none'; form-action 'none'">
+<meta name="version" content="2026.10.05-6"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'unsafe-inline'; img-src data: blob: https://i.ytimg.com; media-src blob: https: http:; connect-src 'self' https:; frame-src https://www.youtube.com; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -73,19 +73,7 @@ button.icon svg{width:18px;height:18px;fill:currentColor;display:block}
 .secretBtns{display:flex;gap:8px}
 #gl{touch-action:none}
 #bSecret{opacity:.75}
-#bSecret.on,#bHyp.on{opacity:1;background:var(--accent);animation:secretGlow 1.6s ease-in-out infinite}
-#splash.hyp span{letter-spacing:.24em;padding-left:.24em;text-shadow:-3px 0 rgba(170,80,255,.9),3px 0 rgba(0,230,200,.9),0 0 34px rgba(255,255,255,.65)}
-@media(max-width:480px){.top{padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}.secretBtns{gap:5px}.secretBtns button.icon{min-width:36px;min-height:36px}.seg button{white-space:nowrap}}
-.hypBar{left:0;right:0;top:calc(70px + env(safe-area-inset-top));display:flex;justify-content:center;gap:8px;pointer-events:none}
-.hypBar button{pointer-events:auto;font-size:12px;padding:6px 12px;min-height:34px;background:var(--panel);border-color:var(--panel-border);
-  -webkit-backdrop-filter:blur(var(--blur)) saturate(1.6);backdrop-filter:blur(var(--blur)) saturate(1.6)}
-.hypBar button.on{background:var(--accent)}
-body.hypOn .hint{top:calc(114px + env(safe-area-inset-top))}
-/* hypnotise floaters: the user's own pictures, GIFs and videos circling the cover */
-#floaters{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;opacity:0}
-#floaters>*{position:absolute;left:0;top:0;width:var(--fs,90px);height:var(--fs,90px);object-fit:cover;border-radius:var(--fr,22%);
-  border:1.5px solid rgba(255,255,255,.6);box-shadow:0 0 24px var(--accent),0 6px 18px rgba(0,0,0,.4);background:#111;will-change:transform}
-body.gaming #floaters{display:none}
+#bSecret.on{opacity:1;background:var(--accent);animation:secretGlow 1.6s ease-in-out infinite}
 @keyframes secretGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}50%{box-shadow:0 0 0 9px rgba(255,255,255,0)}}
 #splash{position:fixed;inset:0;z-index:6;display:grid;place-items:center;pointer-events:none;opacity:0}
 #splash span{font-weight:800;font-size:clamp(22px,6.500vw,58px);letter-spacing:.4em;padding-left:.4em;color:#fff;white-space:nowrap;
@@ -218,7 +206,6 @@ body.drag::after{content:"Drop music";position:fixed;inset:14px;z-index:5;border
   <div class="secretBtns">
     <button id="bSecret" class="icon" title="Secret mode"><svg viewBox="0 0 24 24"><ellipse cx="5.500" cy="10.500" rx="2" ry="2.600"/><ellipse cx="9.700" cy="6" rx="2" ry="2.600"/><ellipse cx="14.300" cy="6" rx="2" ry="2.600"/><ellipse cx="18.500" cy="10.500" rx="2" ry="2.600"/><path d="M12 11c-3 0-5.500 3-5.500 5.500 0 2 1.500 2.800 3 2.800 1 0 1.700-.5 2.500-.5s1.500.5 2.500.5c1.500 0 3-.8 3-2.800C17.500 14 15 11 12 11z"/></svg></button>
     <button id="bGame" class="icon" title="Beat Popper"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4"/></svg></button>
-    <button id="bHyp" class="icon" title="Hypnotise mode"><svg viewBox="0 0 24 24"><path d="M11.300 12a1.500 1.500 0 0 1 3 0a3 3 0 0 1-6 0a4.500 4.500 0 0 1 9 0a6 6 0 0 1-12 0a7.500 7.500 0 0 1 15 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
     <button id="bFaces" class="icon" title="Floating Bean faces on or off" hidden><svg viewBox="0 0 24 24"><path d="M4 3.500l4.200 3.300a8.500 8.500 0 0 1 7.600 0L20 3.500V13a8 8 0 0 1-16 0zM9 11.200a1.300 1.300 0 1 0 0 2.600 1.300 1.300 0 0 0 0-2.600zm6 0a1.300 1.300 0 1 0 0 2.600 1.300 1.300 0 0 0 0-2.600z" fill-rule="evenodd"/></svg></button>
   </div>
   <div class="seg" id="themeSeg">
@@ -228,13 +215,6 @@ body.drag::after{content:"Drop music";position:fixed;inset:14px;z-index:5;border
   </div>
 </header>
 
-<div id="floaters"></div>
-<div class="ui hypBar" id="hypBar" hidden>
-  <button id="bHypC" class="on" title="The cover itself swirls, sways and glows, or stays as normal">Dynamic cover</button>
-  <button id="bHypAdd" title="Add up to 5 of your own pictures, GIFs or videos that circle the cover">Add floaters</button>
-  <button id="bHypClr" title="Remove all floaters" hidden>Clear</button>
-</div>
-<input type="file" id="fFloat" accept="image/*,video/*" multiple hidden>
 <div class="ui hint" id="hint">Add music or paste a link to start</div>
 <div class="ui ext" id="ext" hidden>
   <div class="grip" id="extGrip" title="Drag to move"><button id="bSync" title="Get the visuals following the sound again">Sync</button><span></span><button id="bExtX" title="Close player">×</button></div>
@@ -425,7 +405,7 @@ void main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);gl_Position=vec4(p*2.-
 const FS=`#version 300 es
 precision highp float;
 uniform vec2 uRes;
-uniform float uTime,uBass,uMid,uTreb,uBeat,uTheme,uMix,uHas,uAspA,uAspB,uArt,uRot,uCy,uBg,uFlow,uDip,uVar,uWarp,uCx,uRR,uDark,uRipple,uTilt,uHyp,uHypC,uHypZ,uHypN,uHypR;
+uniform float uTime,uBass,uMid,uTreb,uBeat,uTheme,uMix,uHas,uAspA,uAspB,uArt,uRot,uCy,uBg,uFlow,uDip,uVar,uWarp,uCx,uRR,uDark,uRipple,uTilt;
 uniform vec3 uC1,uC2,uC3;
 uniform sampler2D uA,uB;
 out vec4 o;
@@ -576,41 +556,6 @@ vec3 backdrop(vec2 uv,float asp){
   vec2 q=(uv-.5)*(1.-.06*uBeat-.015*uBass)+.5;
   return vivid(photo(q,asp,1.5))*(.46+.16*uBass+.16*uBeat)+uBeat*.04;
 }
-vec3 rich(vec3 c,float k){return clamp(mix(vec3(dot(c,vec3(.299,.587,.114))),c,k),0.,1.);}
-vec3 hue(vec3 c,float a){const vec3 k=vec3(.57735);float ca=cos(a);return clamp(c*ca+cross(k,c)*sin(a)+k*dot(k,c)*(1.-ca),0.,1.);}
-// hypnotise: the cover art pours out of itself as a slow kaleidoscope tunnel that surges with the music.
-// Everything is centred on the cover, so the eye is always drawn back to it
-vec3 hypno(vec2 p){
-  vec2 d=(p-vec2(uCx,uCy))*(1.-.07*min(uBeat,1.));           // the whole tunnel punches in on the beat
-  float r=length(d)+1e-4,a=atan(d.y,d.x),s=max(uArt,.05),bt=min(uBeat,1.);
-  // shockwave: a ring leaves the cover on each beat and bends the picture as it passes
-  float wv=exp(-pow((r-s*(1.2+2.8*(1.-bt)))*9.,2.))*bt;
-  r*=1.-wv*.14;
-  float z=log(r)*.6-uHypZ;                                   // rings travel outwards
-  float seg=6.2832/uHypN;
-  vec2 wob=(vec2(fbm(d*2.+uTime*.1),fbm(d*2.+7.-uTime*.1))-.5)*(.1+.12*uBass);
-  float a1=a+.4*sin(z*1.5+uTime*.2)+uHypR;                   // and slowly twist
-  float k=abs(mod(a1,seg)-seg*.5)/(seg*.5),f=abs(fract(z)*2.-1.);
-  vec3 c=uHas>.5?photo(vec2(k,f)+wob,1.,1.5):pal(fract(f*.8+k*.2));
-  // a second, deeper and softer layer turning the other way
-  float z2=z*.5+.37,a2=a-uHypR*1.6+z2*.9;
-  float k2=abs(mod(a2,seg)-seg*.5)/(seg*.5),f2=abs(fract(z2)*2.-1.);
-  vec3 c2=uHas>.5?photo(vec2(f2,k2)-wob,1.,3.5):pal(fract(f2*.6+k2*.3+.5));
-  c=mix(c,max(c,c2),.45+.3*sin(z*3.1416+uTime*.3));
-  c=hue(rich(c,1.5),.3*sin(z*1.3-uTime*.22));                // colours drift through their neighbours
-  c=mix(c,(.22+1.5*dot(c,vec3(.299,.587,.114)))*uC1,.55);    // washed in the mode's own colour (bright pink)
-  c=pow(c,vec3(.88))*(.58+.42*uBass+.3*uBeat);
-  c*=.7+.3*sin(f*3.1416);                                    // soft seams give the tunnel depth
-  float arm=.5+.5*sin(3.*a+log(r)*7.-uHypZ*12.566+uHypR*3.);  // spiral arms winding into the cover
-  c*=.8+.34*arm*arm;
-  c+=pal(fract(z*.5+k*.3))*(.08+.2*uBeat);                   // colour sheen
-  float ray=pow(noise(vec2(cos(a),sin(a))*3.+vec2(uHypR*2.,uTime*.5)),3.)*exp(-max(r-s,0.)*1.7);
-  c+=mix(uC2,vec3(1.),.45)*ray*(.2+1.1*uTreb+.3*uBeat);      // rays of light from behind the cover
-  c+=mix(uC1,vec3(1.),.5)*wv*.45;
-  c+=pal(.5)*exp(-max(r-s,0.)*5.)*(.12+.3*uBeat);            // the cover glows
-  c*=1.-.25*dot(d,d);                                        // darker far from the cover, so the eye stays on it
-  return mix(pal(.5)*(.5+.5*uBeat),c,smoothstep(s*.25,s*.9,r));
-}
 void main(){
   vec2 uv=gl_FragCoord.xy/uRes;float asp=uRes.x/uRes.y;vec2 p=(uv-.5)*vec2(asp,1.);
   // hyper warp: the whole scene swirls into the centre while switching Secret mode
@@ -622,9 +567,8 @@ void main(){
   float t=uTime*.07;
 
   int bg=int(uBg+.5);
-  vec3 col=vec3(0.);
-  if(uHyp>.999){}   // hypnotise covers the whole background, so the scene underneath is skipped
-  else if(bg==0)col=clouds(uv,p,asp,t);
+  vec3 col;
+  if(bg==0)col=clouds(uv,p,asp,t);
   else{
     if(bg==1)col=aurora(p,t);
     else if(bg==2)col=liquid(uv,p,asp,t);
@@ -638,7 +582,6 @@ void main(){
     else col=backdrop(uv,asp);
     if(bg<10)col=mix(col,mix(vec3(.07),col,.85),uDark);
   }
-  if(uHyp>0.)col=mix(col,hypno(p),uHyp);
   col*=(1.-.3*dot(p,p))*(1.-uDip);
 
   // artwork: rounded square (Apple) morphing to a spinning disc (Spotify)
@@ -649,33 +592,16 @@ void main(){
   float dd=mix(length(max(abs(q)-1.+rr,0.))-rr,length(q)-1.,uTheme);
   col*=1.-.4*exp(-max(dd,0.)*3.);
   col+=mix(uC1,vec3(1.),.3)*exp(-max(dd,0.)*6.)*uBeat*.3;
-  // dynamic cover: echoes of its outline drift outwards, in time with the tunnel
-  if(uHypC>0.&&dd>0.)for(int i=0;i<3;i++){
-    float e=fract(uHypZ*2.+float(i)/3.);
-    col+=pal(float(i)/2.)*exp(-abs(dd-e*1.5)*9.)*(1.-e)*(.25+.5*uBeat)*uHypC*step(.001,uArt);
-  }
   float fw=1.5/(uRes.y*s);
   float m=smoothstep(fw,-fw,dd)*step(.001,uArt);
   if(m>0.){
     float c=cos(uRot),sn=sin(uRot);vec2 r=mat2(c,-sn,sn,c)*q;
     r+=normalize(r+1e-5)*sin(length(r)*9.-uTime*5.)*.018*uBass*uRipple;
     r/=1.+uBeat*.07;
-    float lr=length(r);
-    if(uHypC>0.){
-      // the picture swirls with the bass and swells from its centre on the beat
-      float an=uHypC*(.45*uBass+.1*sin(uTime*.9))*sin(lr*4.-uHypZ*6.2832)*smoothstep(1.3,0.,lr);
-      float hc=cos(an),hs=sin(an);r=mat2(hc,-hs,hs,hc)*r;
-      r*=mix(1.,.86+.14*min(lr,1.),uHypC*min(uBeat,1.));
-    }
     vec2 a=r*.5+.5;vec2 off=r*.025*uBeat+vec2(.004*uTreb,0.);
     vec3 art;
     if(uHas>.5)art=vivid(vec3(photo(a+off,1.,0.).r,photo(a,1.,0.).g,photo(a-off,1.,0.).b));
     else art=mix(uC2,uC1,a.y)*(.55+.45*fbm(r*2.+uTime*.2));
-    if(uHypC>0.){
-      art=mix(art,rich(art,1.3)*1.04+pal(fract(lr*.8-uHypZ))*(.05+.09*uBeat),uHypC);
-      // a band of light sweeps across, like a holographic card catching the sun
-      art+=pal(fract(a.x+a.y-uHypZ))*smoothstep(.75,1.,sin((a.x+a.y)*2.6-uTime*1.3))*(.1+.1*uTreb)*uHypC;
-    }
     art*=1.+uBeat*.18;
     col=mix(col,art,m);
   }
@@ -692,7 +618,7 @@ function initGL(){
   gl.linkProgram(pr);
   if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(pr));
   gl.useProgram(pr);
-  for(const n of ['uRes','uTime','uBass','uMid','uTreb','uBeat','uTheme','uMix','uHas','uAspA','uAspB','uArt','uRot','uCy','uBg','uFlow','uDip','uVar','uWarp','uCx','uRR','uDark','uRipple','uTilt','uHyp','uHypC','uHypZ','uHypN','uHypR','uC1','uC2','uC3','uA','uB'])
+  for(const n of ['uRes','uTime','uBass','uMid','uTreb','uBeat','uTheme','uMix','uHas','uAspA','uAspB','uArt','uRot','uCy','uBg','uFlow','uDip','uVar','uWarp','uCx','uRR','uDark','uRipple','uTilt','uC1','uC2','uC3','uA','uB'])
     U[n]=gl.getUniformLocation(pr,n);
   gl.uniform1i(U.uA,0);gl.uniform1i(U.uB,1);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
@@ -712,9 +638,6 @@ function makeTex(src){
 let W=0,H=0,artS=.22,cyOff=.06,cxOff=0,artT=.22,cyT=.06,cxT=0,dpr=1,laidOut=false;
 // the cover can be resized by hand: artK is that choice (1 = normal), kept within what fits the screen
 let artK=1,artRaw=1,kMax=1.6,artV=0,cxV=0,cyV=0,dragX=0,dragY=0,tilt=0,tiltV=0;
-// Hypnotise mode: hyp is the mode, hypDyn whether the cover itself joins in; hypF/hypCF fade them in and out
-const HYP_PAL=[[1,.16,.6],[1,.42,.8],[.78,.2,1]];
-let hyp=false,hypDyn=true,hypF=0,hypCF=0,hypZ=0,hypN=6,hypR=0;
 try{const k=parseFloat(localStorage.getItem('pulse-art'));if(k>=.45&&k<=2)artK=artRaw=k}catch{}
 const fitK=k=>Math.max(.45,Math.min(kMax,k)),artGoal=()=>artT*fitK(artK);
 function layout(){
@@ -1172,17 +1095,6 @@ function drawFx(dt){
     x.stroke();
   }
 
-  if(hypF>.01){
-    // hypnotise: motes of light spiral out from the cover, carried by the music
-    x.globalCompositeOperation='lighter';
-    for(let i=0;i<44;i++){
-      const u=(i*.618+hypZ*.35)%1,a=i*2.39996+hypR*2+u*3,d=R*(1.08+u*u*3.4);
-      x.fillStyle=`rgba(${acc},${Math.min(1,(1-u)*u*4*hypF*(.22+L.treb*.6+L.vb*.3))})`;
-      x.beginPath();x.arc(cx+Math.cos(a)*d,cy+Math.sin(a)*d,dpr*(1.2+u*2.6),0,Math.PI*2);x.fill();
-    }
-    x.globalCompositeOperation='source-over';
-  }
-
   for(let i=parts.length-1;i>=0;i--){
     const q=parts[i];q.d+=q.v*dt*(1+L.bass);q.life-=dt*(sp?.8:.5);
     if(q.life<=0){parts.splice(i,1);continue}
@@ -1388,77 +1300,8 @@ async function toggleSecret(){
   }
   secretNext=!secret;warpDir=1;
   $('bSecret').classList.toggle('on',secretNext);
-  if(secretNext)splash('SECRET MODE');
+  if(secretNext){const s=$('splash');s.classList.remove('go');void s.offsetWidth;s.classList.add('go')}
 }
-function splash(text,cls){
-  const s=$('splash');s.firstChild.textContent=text;
-  s.className='';void s.offsetWidth;s.className='go'+(cls?' '+cls:'');
-}
-// ---------- Hypnotise mode ----------
-function setHyp(on){
-  hyp=on;$('bHyp').classList.toggle('on',on);$('hypBar').hidden=!on;document.body.classList.toggle('hypOn',on);
-  if(on)splash('HYPNOTISE MODE','hyp');
-  for(const f of floats)if(f.vid){if(on)f.el.play().catch(()=>{});else f.el.pause()}
-  wake();
-}
-// floaters: up to 5 of your own pictures, GIFs or videos circling the cover. They are shown straight from
-// the device (nothing is uploaded) and are gone when the page is closed
-const floatEl=$('floaters'),floats=[],FLOAT_MAX=5;let floatA=0,floatSize=0,floatOp=-1;
-function floatUI(){
-  $('bHypAdd').textContent=floats.length?`Floaters ${floats.length}/${FLOAT_MAX}`:'Add floaters';
-  $('bHypClr').hidden=!floats.length;
-}
-function dropFloat(f){
-  const i=floats.indexOf(f);if(i<0)return;
-  floats.splice(i,1);f.el.remove();URL.revokeObjectURL(f.url);floatUI();
-}
-function addFloats(files){
-  let added=0,over=0;
-  for(const file of files){
-    const vid=file.type.startsWith('video/');
-    if(!vid&&!file.type.startsWith('image/'))continue;
-    if(floats.length>=FLOAT_MAX){over++;continue}
-    const el=document.createElement(vid?'video':'img'),f={el,vid,url:URL.createObjectURL(file),ph:Math.random()*6.28};
-    if(vid){el.muted=true;el.loop=true;el.autoplay=true;el.playsInline=true;el.setAttribute('playsinline','');el.setAttribute('muted','')}
-    el.draggable=false;el.alt='';
-    el.onerror=()=>{dropFloat(f);toast('One of those files could not be shown')};
-    el.src=f.url;floatEl.appendChild(el);floats.push(f);added++;
-    if(vid)el.play().catch(()=>{});
-  }
-  floatUI();
-  if(over)toast(`Only ${FLOAT_MAX} floaters at a time`);
-  else if(added)toast(added>1?added+' floaters added':'Floater added');
-  else toast('Pick pictures, GIFs or videos');
-}
-function stepFloats(dt,now){
-  const op=floats.length?+hypF.toFixed(2):0;
-  if(op!=floatOp){floatOp=op;floatEl.style.opacity=op;floatEl.style.display=op?'':'none'}
-  if(!op)return;
-  floatA+=dt*(.2+L.bass*.5+L.vb*.5);
-  const n=floats.length,ih=innerHeight,iw=innerWidth,cx=iw/2+cxOff*ih,cy=ih/2-cyOff*ih,R=artS*ih;
-  const size=Math.round(Math.max(54,Math.min(R*.56,140)));
-  if(size!=floatSize){floatSize=size;floatEl.style.setProperty('--fs',size+'px')}
-  floatEl.style.setProperty('--fr',theme=='spotify'?'50%':'22%');
-  // an orbit just outside the cover; pictures lower on the screen are nearer, so they are larger and on top
-  const rx=Math.max(R,Math.min(R*1.75,iw/2-size*.35)),ry=Math.min(R*1.42+size*.2,Math.max(R*1.1,cy-size*.5-74));   // stays clear of the buttons at the top
-  floats.forEach((f,i)=>{
-    const a=floatA+i/n*Math.PI*2,near=Math.sin(a);
-    const X=cx+Math.cos(a)*rx,Y=cy+near*ry+Math.sin(now*1.1+f.ph)*size*.08;
-    const sc=(.84+.24*near)*(1+L.vb*.12),rot=Math.sin(now*.8+f.ph)*7+tilt*40;
-    f.el.style.transform=`translate3d(${(X-size/2).toFixed(1)}px,${(Y-size/2).toFixed(1)}px,0) rotate(${rot.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
-    f.el.style.zIndex=near>0?2:1;
-  });
-}
-$('bHypAdd').onclick=()=>{if(floats.length>=FLOAT_MAX)toast(`Only ${FLOAT_MAX} floaters at a time. Clear them to add new ones`);else $('fFloat').click()};
-$('fFloat').onchange=e=>{addFloats([...e.target.files]);e.target.value=''};
-$('bHypClr').onclick=()=>{[...floats].forEach(dropFloat);toast('Floaters cleared')};
-function setHypDyn(on,quiet){
-  hypDyn=on;$('bHypC').classList.toggle('on',on);save('pulse-hypdyn',on?'1':'0');
-  if(!quiet)toast(on?'Dynamic cover':'Normal cover');
-}
-$('bHyp').onclick=()=>setHyp(!hyp);
-$('bHypC').onclick=()=>setHypDyn(!hypDyn);
-try{if(localStorage.getItem('pulse-hypdyn')=='0')setHypDyn(false,true)}catch{}
 function beanCut(){
   if(bean.length<2||bfade)return;
   let n;do{n=Math.floor(Math.random()*bean.length)}while(n==bi);
@@ -2230,16 +2073,9 @@ function step(ms){
   // the cover sits on springs: it bounces to its size and wobbles back into place when let go
   {
     const sd=Math.min(dt,.033),sp=(x,v,t)=>v+((t-x)*170-v*17)*sd;
-    // hypnotise: the dynamic cover breathes and sways like a slow pendulum
-    hypF+=((hyp&&!bp.open?1:0)-hypF)*Math.min(1,dt*2.5);hypCF+=((hyp&&hypDyn&&!bp.open?1:0)-hypCF)*Math.min(1,dt*2.5);
-    if(hypF<.001)hypF=0;if(hypCF<.001)hypCF=0;
-    hypZ+=dt*(.08+L.bass*.45+L.vb*.8)*Math.min(1.5,.4+fxk);
-    // every 16 beats the kaleidoscope changes its number of mirrors and turns the other way
-    const ph=Math.floor(beats/16);hypN=[6,8,10,4][ph%4];
-    hypR+=dt*(ph%2?-1:1)*(.05+L.mid*.35+L.vb*.25);
-    artV=sp(artS,artV,artGoal()*(1+hypCF*(.04+.03*Math.sin(now*1.3))));artS=Math.max(.02,artS+artV*sd);
+    artV=sp(artS,artV,artGoal());artS=Math.max(.02,artS+artV*sd);
     cxV=sp(cxOff,cxV,cxT+dragX);cxOff+=cxV*sd;cyV=sp(cyOff,cyV,cyT+dragY);cyOff+=cyV*sd;
-    tiltV=sp(tilt,tiltV,Math.max(-.16,Math.min(.16,-cxV*.35))+hypCF*.05*Math.sin(now*.9));tilt+=tiltV*sd;
+    tiltV=sp(tilt,tiltV,Math.max(-.16,Math.min(.16,-cxV*.35)));tilt+=tiltV*sd;
   }
   rot=(rot+dt*(.12+L.mid*.5))%(Math.PI*2);
   // scenes move faster with the music; switching dips through black to hide the cut
@@ -2252,10 +2088,9 @@ function step(ms){
   if(w>=0){if(!hadArt){cur=nxt=w;fading=false;mixF=0}else if(w!=(fading?nxt:cur))gotoPhoto(w)}
   hadArt=w>=0;
   const has=S||w>=0,A=S?bean[bi]:has?photos[cur]:null,B=S?bean[bfade?bn:bi]:has?photos[fading?nxt:cur]:null;
-  // Hypnotise mode has its own colour: bright pink, whatever the cover or theme
-  const pink=hyp&&!bp.open,target=pink?HYP_PAL:has&&(usePhotoColors||S)?B.pal:THEMES[theme],k=Math.min(1,dt*3);
+  const target=has&&(usePhotoColors||S)?B.pal:THEMES[theme],k=Math.min(1,dt*3);
   for(let i=0;i<3;i++)for(let j=0;j<3;j++)pal[i][j]+=(target[i][j]-pal[i][j])*k;
-  syncAccent(pink||has&&(usePhotoColors||S),now);
+  syncAccent(has&&(usePhotoColors||S),now);
 
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,has?A.tex:blankTex);
   gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,has?B.tex:blankTex);
@@ -2264,12 +2099,11 @@ function step(ms){
   gl.uniform1f(U.uTheme,themeF);gl.uniform1f(U.uRR,rrF);gl.uniform1f(U.uDark,darkF);gl.uniform1f(U.uRipple,ripple?1:0);gl.uniform1f(U.uMix,S?(bfade?bmix:0):fading?mixF*mixF*(3-2*mixF):0);gl.uniform1f(U.uHas,has?1:0);
   gl.uniform1f(U.uAspA,has?A.asp:1);gl.uniform1f(U.uAspB,has?B.asp:1);
   gl.uniform1f(U.uArt,bp.open?0:artS);gl.uniform1f(U.uCy,cyOff);gl.uniform1f(U.uCx,cxOff);gl.uniform1f(U.uTilt,tilt);
-  gl.uniform1f(U.uHyp,hypF);gl.uniform1f(U.uHypC,hypCF);gl.uniform1f(U.uHypZ,hypZ);gl.uniform1f(U.uHypN,hypN);gl.uniform1f(U.uHypR,hypR);
   gl.uniform1f(U.uBg,S?9:bp.open&&has?10:bg);gl.uniform1f(U.uVar,bvar);gl.uniform1f(U.uWarp,warp);gl.uniform1f(U.uFlow,flow);gl.uniform1f(U.uDip,dip);gl.uniform1f(U.uRot,rot*themeF);
   gl.uniform3fv(U.uC1,pal[0]);gl.uniform3fv(U.uC2,pal[1]);gl.uniform3fv(U.uC3,pal[2]);
   gl.drawArrays(gl.TRIANGLES,0,3);
 
-  drawFx(dt);stepFloats(dt,now);
+  drawFx(dt);
   drawStamp();
   drawFaces(dt);
   drawLyrics();
@@ -2308,7 +2142,7 @@ function wake(){
   idleT=setTimeout(()=>{
     const busy=(mode=='file'&&!audio.paused)||musicOn||(!!ext&&ext.playing);
     if(busy&&!dragO&&document.activeElement.id!='linkIn'&&!(canHover&&document.querySelector('.dock:hover,.top:hover,.ext:hover')))document.body.classList.add('idle');
-  },hyp?2000:3500);   // hypnotise clears the screen sooner
+  },3500);
 }
 const canHover=matchMedia('(hover:hover)').matches;
 if(!x.roundRect)CanvasRenderingContext2D.prototype.roundRect=function(a,b,w,h,r){
